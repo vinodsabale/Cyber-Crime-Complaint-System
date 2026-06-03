@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head><title>Wanted List</title></head>
+<body>
+<th:block layout:fragment="page-title">Wanted Suspects</th:block>
+<div layout:fragment="content">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-danger text-white fw-semibold">
+      <i class="bi bi-exclamation-triangle me-2"></i>Wanted Suspects List
+      <span class="badge bg-white text-danger ms-2" th:text="${suspects.size()}">0</span>
+    </div>
+    <div class="card-body p-0">
+      <div th:if="${#lists.isEmpty(suspects)}" class="text-center py-5 text-muted">
+        <i class="bi bi-check-circle fs-1 text-success d-block mb-2"></i>No wanted suspects
+      </div>
+      <div class="row g-3 p-3" th:if="${not #lists.isEmpty(suspects)}">
+        <div class="col-md-4" th:each="s : ${suspects}">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h6 class="fw-bold mb-0" th:text="${s.fullName}"></h6>
+                  <small class="text-muted"
+                         th:text="${s.alias != null ? 'aka ' + s.alias : s.suspectCode}"></small>
+                </div>
+                <span class="badge" th:classappend="'badge-'+${s.dangerLevel}"
+                      th:text="${s.dangerLevel}"></span>
+              </div>
+              <dl class="row small mb-2">
+                <dt class="col-5 text-muted">Gender</dt>
+                <dd class="col-7" th:text="${s.gender ?: '—'}"></dd>
+                <dt class="col-5 text-muted">Phone</dt>
+                <dd class="col-7"><code class="small" th:text="${s.phone ?: '—'}"></code></dd>
+                <dt class="col-5 text-muted">Cases</dt>
+                <dd class="col-7 fw-semibold text-danger" th:text="${s.totalCases}"></dd>
+                <dt class="col-5 text-muted">Modus</dt>
+                <dd class="col-7" th:text="${#strings.abbreviate(s.modusOperandi ?: '—', 30)}"></dd>
+              </dl>
+              <a th:href="@{/suspects/{id}(id=${s.id})}" class="btn btn-sm btn-outline-primary w-100">
+                View Full Profile
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+ 
+ 

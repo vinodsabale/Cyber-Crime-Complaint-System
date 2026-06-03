@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title layout:title-pattern="$CONTENT_TITLE - Smart Crime Tracker">Smart Crime Tracker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"/>
+  <style>
+    :root { --sidebar-width: 240px; --primary: #1a3c5e; }
+    body  { background: #f4f6f9; font-size: .9rem; }
+    .sidebar {
+      width: var(--sidebar-width); min-height: 100vh;
+      background: var(--primary); position: fixed;
+      top: 0; left: 0; z-index: 999; overflow-y: auto;
+    }
+    .sidebar .brand { padding: 1.2rem 1rem; border-bottom: 1px solid rgba(255,255,255,.15); }
+    .sidebar .brand h5 { color: #fff; font-weight: 700; font-size: 1rem; margin: 0; }
+    .sidebar .nav-link {
+      color: rgba(255,255,255,.75); padding: .6rem 1rem;
+      border-radius: 6px; margin: .1rem .5rem; transition: .2s;
+    }
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active { background: rgba(255,255,255,.15); color: #fff; }
+    .sidebar .nav-section {
+      color: rgba(255,255,255,.4); font-size: .7rem;
+      font-weight: 700; text-transform: uppercase;
+      padding: .8rem 1rem .2rem; letter-spacing: .08em;
+    }
+    .main-content { margin-left: var(--sidebar-width); padding: 1.5rem; min-height: 100vh; }
+    .topbar {
+      background: #fff; border-bottom: 1px solid #e5e7eb;
+      padding: .6rem 1.5rem; position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+    }
+    .stat-card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.07); transition: .2s; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.12); }
+    .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .badge-CRITICAL   { background: #dc3545; color: #fff; }
+    .badge-HIGH       { background: #fd7e14; color: #fff; }
+    .badge-MEDIUM     { background: #ffc107; color: #212529; }
+    .badge-LOW        { background: #198754; color: #fff; }
+    .badge-SUBMITTED  { background: #6c757d; color: #fff; }
+    .badge-ASSIGNED   { background: #0d6efd; color: #fff; }
+    .badge-UNDER_INVESTIGATION { background: #6610f2; color: #fff; }
+    .badge-RESOLVED   { background: #198754; color: #fff; }
+    .badge-REJECTED   { background: #dc3545; color: #fff; }
+    .badge-WANTED     { background: #dc3545; color: #fff; }
+    .badge-ARRESTED   { background: #6c757d; color: #fff; }
+    .badge-MOST_WANTED{ background: #212529; color: #fff; }
+    .badge-VERY_HIGH  { background: #dc3545; color: #fff; }
+    .table-hover tbody tr:hover { background: #f0f4f8; }
+    .btn-primary { background: #1a3c5e; border-color: #1a3c5e; }
+    .btn-primary:hover { background: #142f4a; border-color: #142f4a; }
+  </style>
+  <th:block layout:fragment="head-extra"/>
+</head>
+<body>
+
+<nav class="sidebar d-flex flex-column">
+  <div class="brand">
+    <h5><i class="bi bi-shield-fill-check me-2"></i>Crime Tracker</h5>
+    <small class="text-white-50">Smart Crime Tracking System</small>
+  </div>
+  <div class="flex-grow-1 py-2">
+    <div class="nav-section">Main</div>
+    <a th:href="@{/dashboard}" class="nav-link"
+       th:classappend="${currentUri != null and currentUri=='/dashboard'?'active':''}">
+      <i class="bi bi-speedometer2 me-2"></i>Dashboard
+    </a>
+
+    <div class="nav-section">Complaints</div>
+    <a th:href="@{/complaints}" class="nav-link"
+       th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/complaints')?'active':''}">
+      <i class="bi bi-file-earmark-text me-2"></i>All Complaints
+    </a>
+    <a th:href="@{/complaints/new}" class="nav-link">
+      <i class="bi bi-plus-circle me-2"></i>New Complaint
+    </a>
+    <a th:href="@{/complaints/track}" class="nav-link">
+      <i class="bi bi-search me-2"></i>Track Complaint
+    </a>
+
+    <div class="nav-section" sec:authorize="hasAnyRole('OFFICER','ADMIN','ANALYST')">Investigation</div>
+    <a th:href="@{/officer/complaints}" class="nav-link"
+       sec:authorize="hasAnyRole('OFFICER','ADMIN','ANALYST')"
+       th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/officer')?'active':''}">
+      <i class="bi bi-clipboard-check me-2"></i>My Cases
+    </a>
+    <a th:href="@{/suspects}" class="nav-link"
+       sec:authorize="hasAnyRole('OFFICER','ADMIN','ANALYST')"
+       th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/suspects')?'active':''}">
+      <i class="bi bi-person-x me-2"></i>Suspects
+    </a>
+<a th:href="@{/admin/wanted}" class="nav-link" sec:authorize="hasAnyRole('OFFICER','ADMIN','ANALYST')"
+   th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/admin/wanted')?'active':''}">
+  <i class="bi bi-exclamation-triangle me-2"></i>Wanted List
+</a>
+
+    <div class="nav-section" sec:authorize="hasRole('ADMIN')">Admin</div>
+    <a th:href="@{/admin/users}" class="nav-link" sec:authorize="hasRole('ADMIN')">
+      <i class="bi bi-people me-2"></i>Users
+    </a>
+    <a th:href="@{/admin/officers}" class="nav-link" sec:authorize="hasRole('ADMIN')">
+      <i class="bi bi-person-badge me-2"></i>Officers
+    </a>
+  </div>
+
+  <!-- ✅ LOGOUT FIX: POST form instead of GET link -->
+  <div class="p-3 border-top border-secondary">
+    <small class="text-white-50 d-block mb-1" sec:authentication="name">User</small>
+    <form action="/logout" method="post" class="m-0 p-0">
+      <button type="submit" class="nav-link px-0 btn btn-link border-0 w-100 text-start">
+        <i class="bi bi-box-arrow-left me-2"></i>Logout
+      </button>
+    </form>
+  </div>
+</nav>
+
+<div class="main-content">
+  <div class="topbar mb-3">
+    <h6 class="mb-0 fw-semibold" layout:fragment="page-title">Page</h6>
+    <div class="d-flex align-items-center gap-3">
+      <span class="badge bg-secondary" sec:authentication="authorities">Role</span>
+      <span sec:authentication="name" class="text-muted small"></span>
+    </div>
+  </div>
+
+  <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+    <i class="bi bi-check-circle me-2"></i><span th:text="${success}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+    <i class="bi bi-exclamation-circle me-2"></i><span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+
+  <div layout:fragment="content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<th:block layout:fragment="scripts"/>
+</body>
+</html>

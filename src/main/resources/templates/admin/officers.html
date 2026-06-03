@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragments/layout}">
+<head><title>Manage Officers</title></head>
+<body>
+<th:block layout:fragment="page-title">Manage Officers</th:block>
+<div layout:fragment="content">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">All Officers</h5>
+    <a th:href="@{/admin/officers/new}" class="btn btn-primary btn-sm">
+      <i class="bi bi-plus-circle me-1"></i>Add Officer
+    </a>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Badge No.</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Rank</th>
+              <th>Department</th>
+              <th>Station</th>
+              <th>Caseload</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:if="${officers.isEmpty()}">
+              <td colspan="10" class="text-center text-muted py-4">No officers found.</td>
+            </tr>
+            <tr th:each="o : ${officers}">
+              <td><code th:text="${o.badgeNumber}"></code></td>
+              <td class="fw-semibold" th:text="${o.fullName}"></td>
+              <td th:text="${o.email}"></td>
+              <td th:text="${o.phone}"></td>
+              <td th:text="${o.rank}"></td>
+              <td th:text="${o.department ?: '—'}"></td>
+              <td th:text="${o.stationName ?: '—'}"></td>
+              <td>
+                <span th:text="${o.currentCaseLoad + '/' + o.maxCaseLoad}"></span>
+              </td>
+              <td>
+                <span class="badge"
+                      th:classappend="${o.status.name() == 'ACTIVE' ? 'bg-success' : o.status.name() == 'INACTIVE' ? 'bg-secondary' : o.status.name() == 'ON_LEAVE' ? 'bg-warning text-dark' : 'bg-danger'}"
+                      th:text="${o.status}"></span>
+              </td>
+              <td>
+                <a th:href="@{/admin/officers/{id}/edit(id=${o.id})}"
+                   class="btn btn-sm btn-outline-primary py-0 px-2 me-1">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <form th:action="@{/admin/officers/{id}/delete(id=${o.id})}"
+                      method="post" class="d-inline"
+                      onsubmit="return confirm('Delete this officer?')">
+                  <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Pagination -->
+    <div class="card-footer d-flex justify-content-between align-items-center small text-muted"
+         th:if="${officers.totalPages > 1}">
+      <span>Page <span th:text="${officers.number + 1}"></span> of <span th:text="${officers.totalPages}"></span></span>
+      <div class="d-flex gap-1">
+        <a th:if="${!officers.first}"
+           th:href="@{/admin/officers(page=${officers.number - 1})}"
+           class="btn btn-sm btn-outline-secondary py-0">Prev</a>
+        <a th:if="${!officers.last}"
+           th:href="@{/admin/officers(page=${officers.number + 1})}"
+           class="btn btn-sm btn-outline-secondary py-0">Next</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

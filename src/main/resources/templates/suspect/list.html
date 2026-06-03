@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head><title>Suspects</title></head>
+<body>
+<th:block layout:fragment="page-title">Suspects</th:block>
+<div layout:fragment="content">
+ 
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body py-2">
+      <form th:action="@{/suspects}" method="get" class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <input type="text" name="q" class="form-control form-control-sm"
+                 placeholder="Search by name, phone, email, UPI, bank, IP..."
+                 th:value="${q}"/>
+        </div>
+        <div class="col-md-3">
+          <select name="status" class="form-select form-select-sm">
+            <option value="">All Statuses</option>
+            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                    th:selected="${s == currentStatus}"></option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select name="level" class="form-select form-select-sm">
+            <option value="">All Danger Levels</option>
+            <option th:each="d : ${dangerLevels}" th:value="${d}" th:text="${d}"
+                    th:selected="${d == currentLevel}"></option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary btn-sm w-100">
+            <i class="bi bi-funnel me-1"></i>Filter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+ 
+  <div class="card border-0 shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span class="fw-semibold">
+        <i class="bi bi-person-x me-2"></i>Suspects
+        <span class="badge bg-secondary ms-1" th:text="${suspects.totalElements}">0</span>
+      </span>
+      <div class="d-flex gap-2">
+        <a th:href="@{/suspects/wanted}" class="btn btn-sm btn-outline-danger">
+          <i class="bi bi-exclamation-triangle me-1"></i>Wanted List
+        </a>
+        <a th:href="@{/suspects/new}" class="btn btn-sm btn-primary">
+          <i class="bi bi-plus-lg me-1"></i>Add Suspect
+        </a>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover small mb-0">
+          <thead class="table-light">
+            <tr><th>Code</th><th>Name / Alias</th><th>Status</th><th>Danger</th><th>Phone</th><th>Cases</th><th>Arrested</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr th:if="${suspects.isEmpty()}">
+              <td colspan="8" class="text-center text-muted py-4">No suspects found</td>
+            </tr>
+            <tr th:each="s : ${suspects}">
+              <td><code th:text="${s.suspectCode}"></code></td>
+              <td>
+                <div class="fw-semibold" th:text="${s.fullName}"></div>
+                <small class="text-muted" th:if="${s.alias}" th:text="'aka ' + ${s.alias}"></small>
+              </td>
+              <td><span class="badge" th:classappend="'badge-'+${s.status}" th:text="${s.status}"></span></td>
+              <td><span class="badge" th:classappend="'badge-'+${s.dangerLevel}" th:text="${s.dangerLevel}"></span></td>
+              <td th:text="${s.phone ?: '—'}"></td>
+              <td class="fw-semibold" th:text="${s.totalCases}"></td>
+              <td>
+                <i th:if="${s.arrested}"  class="bi bi-check-circle text-success"></i>
+                <i th:unless="${s.arrested}" class="bi bi-x-circle text-danger"></i>
+              </td>
+              <td>
+                <a th:href="@{/suspects/{id}(id=${s.id})}"
+                   class="btn btn-sm btn-outline-primary py-0 px-2">
+                  <i class="bi bi-eye"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between small text-muted"
+         th:if="${suspects.totalPages > 1}">
+      <span>Page <strong th:text="${suspects.number + 1}"></strong>
+            of <strong th:text="${suspects.totalPages}"></strong></span>
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" th:classappend="${suspects.first ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{/suspects(page=${suspects.number-1})}">«</a>
+          </li>
+          <li th:each="i : ${#numbers.sequence(0, suspects.totalPages - 1)}"
+              class="page-item" th:classappend="${i == suspects.number ? 'active' : ''}">
+            <a class="page-link" th:href="@{/suspects(page=${i})}" th:text="${i + 1}"></a>
+          </li>
+          <li class="page-item" th:classappend="${suspects.last ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{/suspects(page=${suspects.number+1})}">»</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+ 
+ 

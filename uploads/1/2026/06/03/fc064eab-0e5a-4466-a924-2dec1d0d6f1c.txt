@@ -1,0 +1,176 @@
+		CHAT GPT
+-What is Chat GPT?
+->it is a chat bot.like human conversations and more than inteligent.
+  this model use answer and question,assit with diffrent task,composing emails,eassays and code.
+  GPT stands for "Generative Pre-trained Transformer" .
+  ChatGPT trained with reinforcement learning through human feedback and that rank the best responses.
+  
+-Who made chatgpt
+->it was create OpenAI an and resarch company.this launched ChatGPT on 30 Nov 2022.
+
+-How to Make Money
+->
+Email Writing
+Copywriting
+Create ppts
+Resume creation
+Writing product decreption
+Faceless youtbe channle
+Creating and Selling Digital product,ebooks,courses.
+
+-Benefits of ChatGPT?
+->Enhance our productivity and efficiency
+  instant assitance at your fingertips.
+  langauge support
+  custmaize for personalazation
+  learnig and skill development
+  problem solving and creative solution
+  Emotional support and stree relief
+  
+  -How to write prompts for ChatGPT?
+  ->There are multiple things you nedd to add in the prompt to get a perffect result.
+  Steps:
+		Role    (imp)
+		Requirment  (imp)
+		Context/Idea  (imp)
+		Example/Refference
+		Formate
+		Tone
+	
+-Whta are the diffrent uses of ChatGPT?
+->Customer Service
+  Eduction
+  Content creation
+  Research
+  Creative Writing
+  Personalization
+  Code Generation -finding debug
+  Translation
+  Question Anwsering
+  Summarization
+  Brainstorming
+  
+Commen question for interview Pupose?
+
+-How Does ChatGPT WOrk?
+->it is program and software.45tb data are store in chatgpt.
+  
+-What is GPT-3?
+-that are the technology that is upgrade version.
+
+-Can chatgpt understand context in a conversations?
+->Yes
+
+-What are the limitaion of chatgpt?
+->previous data are store then information we can access but not allowing tommorw data.
+
+-Can ChatGPT generate code or provide programming assistance?
+->Yes.
+
+->IS chatgpt Open sourse?
+->not but use api so tthen is  it is use.
+  
+-What are the diffrences between chatgpt and other language model?
+->chatgpt are very advance.it is the word largest model 175 data model are use.gpt 4 are use.
+	chatgpt are 49% inversetment Microsof.
+
+-Can chatgpt perform task beyond text generation?
+->not directly.but we use api acess than we can access.
+
+			AI
+
+-What is AI(Artificial Intelligence)
+->AI refere to simulation of human inteligence process.it involves the devlopmenet of algorithum and software.
+  task include problem-solving,learning from experience,recognizing patterns,understanding natural language and marketing decision.
+
+-AI can be categorized in two main types:
+->NARROW AI   & GENERAL AI
+-NARROW AI(Week) - it is perform specific task or narrow range of task.
+				Eg. personal assistance Siri,Netflix.
+-GENERAL AI(Strong) - It refere to as artificial general inteligence(AGI).It would have ability to understand,learn,apply knowldge across a wide range of task.
+				Eg. Human being.
+
+-History of AI
+->AI birth in the 1959s,with coding of the team by " John McCarthy " to early rule-based system and expert system in the 1970s and 1980s.
+  Today AI is ubiquitous,powering 'virtual assistants,helthcare,finance and more.
+  Ongoinng devlopmenet include reinforcement learning,natual langauge processing and divrse application.
+
+-Use of AI
+->1)Healthcare
+		Drug Discovery
+		Personalization treatmenet
+   2)Finance
+		Algorithum Trading
+	    Fraud detection
+	    Risk Mangment
+	3)Autonoumus vehicles
+		Self Driving cars
+		Traffic Managment
+	4)Natural Langauge Processing
+		ChatBot
+		Langauge Translation
+	5)E-commerce
+		Recommendation System
+		Inventory Managment
+	6)Manufacturing
+		Quality constrol
+		Predictive Maintences
+	7)Robotics
+		Drones
+		Industriall Robots
+	8)Education
+		Personalizaed Learnign
+		Automated Grading
+	9)Agriculture
+	10)Entertainmenet
+	11)Energy
+	12)cybersecurity
+
+-Benefits of AI
+->Efficincey,Accuricy,Automation.
+
+-Challenges
+->  Job Displacment
+	Bias in AI Algorithum
+	privacy concernce
+
+-Diffrent types of AI
+-NARROW , GENERAL , ARTIFICAIL SUPERINTELLIGENCE , MACHINE LEARNING , DEEP LEARNING , REINFORCEMENT LEARNING , ROBITICS , COMPUTER VISION , NATURAL LANGAUGE PROCESSING , 
+ AUTONOUMUS AI , GENERATIVE AI.
+ 
+-GENERATIVE AI
+->  1)Text Generation
+	it is artificial inteligent system and algorithum that are designed to generate contenet or data.
+	it help text generation like mail ,blog,creative writing.
+	NLG model like GPT (Genrative Pre-trained Transformer) ,it can generate human-like text,making them useful for chatbot.
+	EG.chatgpt
+	
+	2)Image Generation -it is a Generative Adversirial Networks are popular technics.it generate images, art and deepfake video.
+	Eg.Midjourney,Dall-E.
+   
+    3)Audio Generation
+	it can produce audio,including speech and music generation.
+	Eg.Jukebox
+	
+	4)Video Generation
+	it similar to video generation .it use to application like video editing,speecial effects,deeepfake videos.
+	Eg.synthesis,pictory,veed.io.
+	
+	5)Gaming and Simulation
+	it use procedural contenet gaming design.
+	
+	6)Drug Discovery
+	in the field of pharmaceuticals.
+	
+	7)Design and Art
+	AI is emplloyed by artists and design to create digital art,logos,and other design elements.
+	Eg.figma AI,adobe express.
+	
+
+	
+   
+ 
+
+
+		
+	 

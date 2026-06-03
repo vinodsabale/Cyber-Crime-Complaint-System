@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{fragments/layout}">
+<head><title>Wanted Persons List</title></head>
+<body>
+<th:block layout:fragment="page-title">Wanted Persons</th:block>
+<div layout:fragment="content">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Wanted Persons List</h5>
+    <a th:href="@{/admin/wanted/new}" class="btn btn-danger btn-sm">
+      <i class="bi bi-plus-circle me-1"></i>Add Wanted Person
+    </a>
+  </div>
+
+  <!-- Flash Messages -->
+  <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="bi bi-check-circle me-1"></i><span th:text="${success}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-circle me-1"></i><span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+
+  <!-- Filter -->
+  <form method="get" th:action="@{/admin/wanted}" class="mb-3">
+    <div class="d-flex gap-2 align-items-center">
+      <select name="status" class="form-select form-select-sm" style="width:180px">
+        <option value="">-- All Status --</option>
+        <option th:each="s : ${statuses}"
+                th:value="${s}"
+                th:text="${s}"
+                th:selected="${s.name() == param.status}"></option>
+      </select>
+      <button class="btn btn-sm btn-primary">
+        <i class="bi bi-funnel me-1"></i>Filter
+      </button>
+      <a th:href="@{/admin/wanted}" class="btn btn-sm btn-outline-secondary">Reset</a>
+    </div>
+  </form>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Alias</th>
+              <th>Danger Level</th>
+              <th>Status</th>
+              <th>Last Location</th>
+              <th>Reward (₹)</th>
+              <th>Complaint</th>
+              <th>Added On</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:if="${wantedList.isEmpty()}">
+              <td colspan="10" class="text-center text-muted py-4">
+                <i class="bi bi-person-x fs-4 d-block mb-1"></i>
+                No wanted persons found.
+              </td>
+            </tr>
+            <tr th:each="w, i : ${wantedList}">
+              <td th:text="${i.count}"></td>
+              <td class="fw-semibold" th:text="${w.name}"></td>
+              <td th:text="${w.alias ?: '—'}"></td>
+              <td>
+                <span class="badge"
+                      th:classappend="${w.dangerLevel.name() == 'EXTREME'} ? 'bg-danger' :
+                                      (${w.dangerLevel.name() == 'HIGH'}   ? 'bg-warning text-dark' :
+                                      (${w.dangerLevel.name() == 'MEDIUM'} ? 'bg-info text-dark' : 'bg-secondary'))"
+                      th:text="${w.dangerLevel}"></span>
+              </td>
+              <td>
+                <span class="badge"
+                      th:classappend="${w.status.name() == 'ACTIVE'}    ? 'bg-danger' :
+                                      (${w.status.name() == 'ARRESTED'} ? 'bg-success' :
+                                      (${w.status.name() == 'DECEASED'} ? 'bg-dark' : 'bg-secondary'))"
+                      th:text="${w.status}"></span>
+              </td>
+              <td th:text="${w.lastKnownLocation ?: '—'}"></td>
+              <td th:text="${w.reward != null ? '₹' + w.reward : '—'}"></td>
+              <td>
+                <code th:if="${w.complaint != null}" th:text="${w.complaint.trackingNumber}"></code>
+                <span th:if="${w.complaint == null}" class="text-muted">—</span>
+              </td>
+              <td th:text="${#temporals.format(w.createdAt, 'dd-MM-yyyy')}"></td>
+              <td>
+                <form th:action="@{/admin/wanted/{id}/delete(id=${w.id})}" method="post"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete this wanted person?')">
+                  <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="card-footer d-flex justify-content-between align-items-center small text-muted"
+         th:if="${wantedList.totalPages > 1}">
+      <span>Page <span th:text="${wantedList.number + 1}"></span> of <span th:text="${wantedList.totalPages}"></span></span>
+      <div class="d-flex gap-1">
+        <a th:if="${!wantedList.first}"
+           th:href="@{/admin/wanted(page=${wantedList.number - 1})}"
+           class="btn btn-sm btn-outline-secondary py-0">Prev</a>
+        <a th:if="${!wantedList.last}"
+           th:href="@{/admin/wanted(page=${wantedList.number + 1})}"
+           class="btn btn-sm btn-outline-secondary py-0">Next</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

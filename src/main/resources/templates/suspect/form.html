@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head><title>Suspect Form</title></head>
+<body>
+<th:block layout:fragment="page-title">
+  <span th:text="${suspect.id != null ? 'Edit Suspect' : 'Add Suspect'}">Form</span>
+</th:block>
+<div layout:fragment="content">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header fw-semibold">
+      <i class="bi bi-person-x me-2"></i>
+      <span th:text="${suspect.id != null ? 'Edit Suspect Record' : 'Add New Suspect'}"></span>
+    </div>
+    <div class="card-body">
+      <form th:action="${suspect.id != null ? '/suspects/' + suspect.id + '/edit' : '/suspects/new'}"
+            th:object="${suspect}" method="post">
+        <div class="row g-3">
+ 
+          <div class="col-12">
+            <h6 class="fw-semibold text-primary border-bottom pb-1">Personal Information</h6>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+            <input type="text" th:field="*{fullName}" class="form-control"
+                   th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:errors="*{fullName}"></div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Alias</label>
+            <input type="text" th:field="*{alias}" class="form-control" placeholder="Known as..."/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" th:field="*{dateOfBirth}" class="form-control"/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Gender</label>
+            <select th:field="*{gender}" class="form-select">
+              <option value="">-- Select --</option>
+              <option th:each="g : ${genders}" th:value="${g}" th:text="${g}"></option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Nationality</label>
+            <input type="text" th:field="*{nationality}" class="form-control" placeholder="Indian"/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Aadhar Number</label>
+            <input type="text" th:field="*{aadharNumber}" class="form-control"/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Phone</label>
+            <input type="text" th:field="*{phone}" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" th:field="*{email}" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Last Known Address</label>
+            <input type="text" th:field="*{lastKnownAddress}" class="form-control"/>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Physical Description</label>
+            <textarea th:field="*{physicalDescription}" class="form-control" rows="2"
+                      placeholder="Height, build, identifying marks..."></textarea>
+          </div>
+ 
+          <div class="col-12 mt-2">
+            <h6 class="fw-semibold text-primary border-bottom pb-1">Classification</h6>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+            <select th:field="*{status}" class="form-select"
+                    th:classappend="${#fields.hasErrors('status')} ? 'is-invalid'">
+              <option value="">-- Select --</option>
+              <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{status}"></div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Danger Level <span class="text-danger">*</span></label>
+            <select th:field="*{dangerLevel}" class="form-select"
+                    th:classappend="${#fields.hasErrors('dangerLevel')} ? 'is-invalid'">
+              <option value="">-- Select --</option>
+              <option th:each="d : ${dangerLevels}" th:value="${d}" th:text="${d}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{dangerLevel}"></div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Modus Operandi</label>
+            <input type="text" th:field="*{modusOperandi}" class="form-control"/>
+          </div>
+ 
+          <div class="col-12 mt-2">
+            <h6 class="fw-semibold text-primary border-bottom pb-1">
+              <i class="bi bi-wifi me-1"></i>Digital Footprint
+            </h6>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Phone Numbers (comma separated)</label>
+            <input type="text" th:field="*{phoneNumbers}" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Email Addresses</label>
+            <input type="text" th:field="*{emailAddresses}" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Bank Accounts</label>
+            <input type="text" th:field="*{bankAccounts}" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">UPI IDs</label>
+            <input type="text" th:field="*{upiIds}" class="form-control" placeholder="name@upi"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">IP Addresses</label>
+            <input type="text" th:field="*{ipAddresses}" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Websites</label>
+            <input type="text" th:field="*{websites}" class="form-control"/>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Notes</label>
+            <textarea th:field="*{notes}" class="form-control" rows="2"></textarea>
+          </div>
+ 
+          <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-save me-1"></i>
+              <span th:text="${suspect.id != null ? 'Update Suspect' : 'Add Suspect'}">Save</span>
+            </button>
+            <a th:href="@{/suspects}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+ 

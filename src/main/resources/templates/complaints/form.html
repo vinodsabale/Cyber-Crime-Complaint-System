@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head><title>Complaint Form</title></head>
+<body>
+<th:block layout:fragment="page-title">
+  <span th:text="${id != null ? 'Edit Complaint' : 'New Complaint'}">Form</span>
+</th:block>
+<div layout:fragment="content">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header fw-semibold">
+      <i class="bi bi-file-earmark-plus me-2"></i>
+      <span th:text="${id != null ? 'Edit Complaint' : 'Register New Complaint'}"></span>
+    </div>
+    <div class="card-body">
+      <form th:action="${id != null ? '/complaints/' + id + '/edit' : '/complaints/new'}"
+            th:object="${complaint}" method="post" enctype="multipart/form-data">
+        <div class="row g-3">
+ 
+          <div class="col-12">
+            <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
+            <input type="text" th:field="*{title}" class="form-control"
+                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'"
+                   placeholder="Brief title of the complaint"/>
+            <div class="invalid-feedback" th:errors="*{title}"></div>
+          </div>
+ 
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Crime Category <span class="text-danger">*</span></label>
+            <select th:field="*{category}" class="form-select"
+                    th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'">
+              <option value="">-- Select Category --</option>
+              <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{category}"></div>
+          </div>
+ 
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Incident Date &amp; Time <span class="text-danger">*</span></label>
+            <input type="datetime-local" th:field="*{incidentDateTime}" class="form-control"
+                   th:classappend="${#fields.hasErrors('incidentDateTime')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:errors="*{incidentDateTime}"></div>
+          </div>
+ 
+          <div class="col-12">
+            <label class="form-label fw-semibold">Incident Location <span class="text-danger">*</span></label>
+            <input type="text" th:field="*{incidentLocation}" class="form-control"
+                   th:classappend="${#fields.hasErrors('incidentLocation')} ? 'is-invalid'"
+                   placeholder="City, State or full address"/>
+            <div class="invalid-feedback" th:errors="*{incidentLocation}"></div>
+          </div>
+ 
+          <div class="col-12">
+            <label class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+            <textarea th:field="*{description}" class="form-control" rows="5"
+                      th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
+                      placeholder="Describe the incident in detail (min 20 characters)"></textarea>
+            <div class="invalid-feedback" th:errors="*{description}"></div>
+          </div>
+ 
+          <div class="col-12">
+            <h6 class="fw-semibold text-primary border-bottom pb-1 mt-2">
+              <i class="bi bi-person-x me-1"></i>Suspect Information (if known)
+            </h6>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Suspect Phone</label>
+            <input type="text" th:field="*{suspectPhone}" class="form-control" placeholder="10-digit"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Suspect Email</label>
+            <input type="email" th:field="*{suspectEmail}" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Suspect Website</label>
+            <input type="text" th:field="*{suspectWebsite}" class="form-control" placeholder="https://..."/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Bank Account</label>
+            <input type="text" th:field="*{suspectBankAccount}" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">UPI ID</label>
+            <input type="text" th:field="*{suspectUpiId}" class="form-control" placeholder="name@upi"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">IP Address</label>
+            <input type="text" th:field="*{suspectIpAddress}" class="form-control"/>
+          </div>
+ 
+          <div class="col-12">
+            <h6 class="fw-semibold text-primary border-bottom pb-1 mt-2">
+              <i class="bi bi-currency-rupee me-1"></i>Financial Loss (if any)
+            </h6>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Amount Lost (₹)</label>
+            <input type="number" th:field="*{financialLoss}" class="form-control" min="0" step="0.01"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Bank Name</label>
+            <input type="text" th:field="*{bankName}" class="form-control" placeholder="SBI, HDFC..."/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Transaction ID</label>
+            <input type="text" th:field="*{transactionId}" class="form-control"/>
+          </div>
+ 
+          <div class="col-12">
+            <h6 class="fw-semibold text-primary border-bottom pb-1 mt-2">
+              <i class="bi bi-paperclip me-1"></i>Evidence Files
+            </h6>
+          </div>
+          <div class="col-12">
+            <input type="file" name="evidenceFiles" class="form-control" multiple
+                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"/>
+            <div class="form-text">PDF, JPG, PNG, DOC — max 10MB each. Multiple files allowed.</div>
+          </div>
+ 
+          <div class="col-12 d-flex gap-2 mt-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-send me-1"></i>
+              <span th:text="${id != null ? 'Update Complaint' : 'Submit Complaint'}">Submit</span>
+            </button>
+            <a th:href="@{/complaints}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+ 
+ 

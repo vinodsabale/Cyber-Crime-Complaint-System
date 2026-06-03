@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}">
+<head><title th:text="${officer.id == null ? 'Add Officer' : 'Edit Officer'}">Officer Form</title></head>
+<body>
+<th:block layout:fragment="page-title">
+  <span th:text="${officer.id == null ? 'Add New Officer' : 'Edit Officer'}">Officer</span>
+</th:block>
+<div layout:fragment="content">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header fw-semibold">
+          <i class="bi bi-person-badge me-2"></i>
+          <span th:text="${officer.id == null ? 'New Officer Details' : 'Update Officer Details'}"></span>
+        </div>
+        <div class="card-body">
+          <form th:action="${officer.id == null ? '/admin/officers/new' : '/admin/officers/' + officer.id + '/edit'}"
+                method="post">
+
+            <div class="row g-3">
+              <!-- Badge Number -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Badge Number <span class="text-danger">*</span></label>
+                <input type="text" name="badgeNumber" class="form-control"
+                       th:value="${officer.badgeNumber}" placeholder="e.g. MH-1234" required/>
+              </div>
+
+              <!-- Full Name -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Full Name <span class="text-danger">*</span></label>
+                <input type="text" name="fullName" class="form-control"
+                       th:value="${officer.fullName}" placeholder="Officer's full name" required/>
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Email <span class="text-danger">*</span></label>
+                <input type="email" name="email" class="form-control"
+                       th:value="${officer.email}" placeholder="officer@police.gov.in" required/>
+              </div>
+
+              <!-- Phone -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Phone <span class="text-danger">*</span></label>
+                <input type="text" name="phone" class="form-control"
+                       th:value="${officer.phone}" placeholder="10-digit mobile number" required/>
+              </div>
+
+              <!-- Rank -->
+              <div class="col-md-4">
+                <label class="form-label fw-semibold small">Rank <span class="text-danger">*</span></label>
+                <select name="rank" class="form-select" required>
+                  <option value="">-- Select Rank --</option>
+                  <option th:each="r : ${ranks}" th:value="${r}" th:text="${r}"
+                          th:selected="${r == officer.rank}"></option>
+                </select>
+              </div>
+
+              <!-- Status -->
+              <div class="col-md-4">
+                <label class="form-label fw-semibold small">Status</label>
+                <select name="status" class="form-select">
+                  <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                          th:selected="${s == officer.status}"></option>
+                </select>
+              </div>
+
+              <!-- Max Case Load -->
+              <div class="col-md-4">
+                <label class="form-label fw-semibold small">Max Case Load</label>
+                <input type="number" name="maxCaseLoad" class="form-control"
+                       th:value="${officer.maxCaseLoad ?: 20}" min="1" max="100"/>
+              </div>
+
+              <!-- Department -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Department</label>
+                <input type="text" name="department" class="form-control"
+                       th:value="${officer.department}" placeholder="e.g. Cyber Crime Division"/>
+              </div>
+
+              <!-- Specialization -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Specialization</label>
+                <input type="text" name="specialization" class="form-control"
+                       th:value="${officer.specialization}" placeholder="e.g. Financial Fraud"/>
+              </div>
+
+              <!-- Station Name -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Station Name</label>
+                <input type="text" name="stationName" class="form-control"
+                       th:value="${officer.stationName}" placeholder="Police station name"/>
+              </div>
+
+              <!-- District -->
+              <div class="col-md-3">
+                <label class="form-label fw-semibold small">District</label>
+                <input type="text" name="district" class="form-control"
+                       th:value="${officer.district}" placeholder="District"/>
+              </div>
+
+              <!-- State -->
+              <div class="col-md-3">
+                <label class="form-label fw-semibold small">State</label>
+                <input type="text" name="state" class="form-control"
+                       th:value="${officer.state}" placeholder="State"/>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle me-1"></i>
+                <span th:text="${officer.id == null ? 'Add Officer' : 'Save Changes'}">Save</span>
+              </button>
+              <a th:href="@{/admin/officers}" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle me-1"></i>Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
